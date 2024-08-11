@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Friend</title>
+</head>
+
+<body>
+    <h1>Edit <%= friend.name %></h1>
+    <form action="/friends/<%=friend._id%>?_method=PUT" method="POST">
+
+        <div>
+            <label for="name">Name: </label>
+            <input type="text" name="name" id="name" placeholder="Name" value="<%=friend.name%>" required minlength="2">
+        </div>
+        <div>
+            <label for="date">Year we met:</label>
+            <input type="number" min="2003" max="2024" name="date" id="date" placeholder="date" value="<%= friend.date %>" required>
+        </div>
+        <div>
+            <label for="note">Add a note (optional):</label>
+            <br>
+            <textarea id="note" name="note" placeholder="note / anything" cols="30" rows="5"><%= friend.note %></textarea>
+        </div>
+        <button>Submit</button>
+    </form>
+
+    <a href="/friends/<%=friend._id%>">Cancel</a>
+
+</body>
+
+</html>

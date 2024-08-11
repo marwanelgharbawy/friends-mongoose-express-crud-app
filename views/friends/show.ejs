@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= friend.name %></title>
+</head>
+
+<body>
+    <h1><%= friend.name %></h1>
+
+    <p><b>Met on:</b> <%= friend.date %></p>
+
+    <% if (friend.note) { %>
+     <p> <b>Note:</b> <%= friend.note %></p>
+    <% } %>
+
+    <a href="/friends/<%= friend.id %>/edit">edit</a> 
+    <br>
+    <a href="/friends">back to friends list</a>
+    <form action="/friends/<%=friend._id%>?_method=DELETE" method="POST">
+        <button>Delete</button>
+    </form>
+    
+</body>
+
+</html>
