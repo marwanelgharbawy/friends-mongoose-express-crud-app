@@ -6,8 +6,8 @@ const methodOverride = require('method-override')
 
 const Friend = require('./models/friend');
 
-const db = "friendsListDemo"
-mongoose.connect(`mongodb://127.0.0.1:27017/${db}`) // Working in "friendsListDemo" database
+const db = "friendsListTest"
+mongoose.connect(`mongodb://127.0.0.1:27017/${db}`) // Working in "friendsListTest" database
     .then(() => {
         console.log(`Connected to ${db} database successfully :)`)
     })
@@ -34,14 +34,14 @@ app.get('/friends', async (req, res) => {
 
 // Page for adding a new friend
 app.get('/friends/new', (req, res) => {
-    res.render('friends/new')
+    const { error } = req.query
+    res.render('friends/new', { error })
 })
 
 // Post route to add a friend
 app.post('/friends', async (req, res) => {
     console.log("New friend registered!")
     console.log(req.body)
-    console.log(req.params)
 
     // Destructure the req.body object
     const { name, date, note } = req.body;
@@ -55,11 +55,17 @@ app.post('/friends', async (req, res) => {
     }
 
     // Create a new Friend 
-    const newFriend = new Friend(friendData);
+    try {
+        const newFriend = new Friend(friendData);
 
-    // Save the new friend to the database
-    await newFriend.save();
-    res.redirect(`/friends/${newFriend._id}`)
+        // Save the new friend to the database
+        await newFriend.save();
+        res.redirect(`/friends/${newFriend._id}`)
+    } catch (error) {
+        console.log("Error, invalid friend")
+        res.redirect(`/friends/new?error=invalid`)
+    }
+
 })
 
 // Show a specific friend
@@ -72,17 +78,23 @@ app.get('/friends/:id', async (req, res) => {
 // Modify data for a friend
 app.get('/friends/:id/edit', async (req, res) => {
     const { id } = req.params;
+    const { error } = req.query
     const friend = await Friend.findById(id);
-    res.render('friends/edit', { friend })
+    res.render('friends/edit', { friend, error })
 })
 
 // Put route for a modification
 app.put('/friends/:id', async (req, res) => {
     const { id } = req.params;
-    const friend = await Friend.findByIdAndUpdate(id, req.body, { runValidators: true, new: true });
-    console.log("A friend has been updated!")
-    console.log(friend)
-    res.redirect(`/friends/${friend._id}`);
+    try {
+        const friend = await Friend.findByIdAndUpdate(id, req.body, { runValidators: true, new: true });
+        console.log("A friend has been updated!")
+        console.log(friend)
+        res.redirect(`/friends/${friend._id}`);
+    } catch (error) {
+        console.log("Error, invalid friend")
+        res.redirect(`/friends/${id}/edit?error=invalid`)
+    }
 })
 
 // Delete route
