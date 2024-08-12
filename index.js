@@ -6,8 +6,8 @@ const methodOverride = require('method-override')
 
 const Friend = require('./models/friend');
 
-const db = "friendsListDemo"
-mongoose.connect(`mongodb://127.0.0.1:27017/${db}`) // Working in "friendsListDemo" database
+const db = "friendsListTest"
+mongoose.connect(`mongodb://127.0.0.1:27017/${db}`) // Working in "friendsListTest" database
     .then(() => {
         console.log(`Connected to ${db} database successfully :)`)
     })
@@ -41,7 +41,6 @@ app.get('/friends/new', (req, res) => {
 app.post('/friends', async (req, res) => {
     console.log("New friend registered!")
     console.log(req.body)
-    console.log(req.params)
 
     // Destructure the req.body object
     const { name, date, note } = req.body;
