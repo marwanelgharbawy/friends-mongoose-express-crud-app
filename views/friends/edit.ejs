@@ -13,6 +13,11 @@
     <%- include('../partials/navbar.ejs') %>
     <div class="container mt-5">
         <h1 class="mb-4">Edit <%= friend.name %></h1>
+        <% if (error == "invalid") { %>
+            <div class="alert alert-danger" role="alert">
+                The data entered is invalid. Please ensure it meets the required format and try again.
+            </div>
+        <% } %>
         <form action="/friends/<%= friend._id %>?_method=PUT" method="POST">
             <div class="row mb-3">
                 <div class="col-md-6">
